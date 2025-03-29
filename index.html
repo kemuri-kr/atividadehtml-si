@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Acadêmico - Busca de Turmas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e6f0ff; /* Azul claro para o fundo */
+        }
+        
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background-color: #0066cc; /* Azul mais escuro para o cabeçalho */
+            color: white;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .form-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0066cc; /* Azul para títulos */
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+        }
+        
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #0066cc; /* Azul para botão principal */
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0052a3;
+        }
+        
+        .btn-secondary {
+            background-color: #ddd;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #ccc;
+        }
+        
+        .results-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+        }
+        
+        .status-open {
+            color: #0066cc; /* Azul para status aberto */
+            font-weight: bold;
+        }
+        
+        .status-closed {
+            color: #cc0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Consulta Geral de Turmas</h1>
+    </div>
+    
+    <div class="container">
+        <div class="form-container">
+            <div class="form-title">Critérios de Busca</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Tipo de Curso:</label>
+                    <select id="curso">
+                        <option value="TODOS">TODOS</option>
+                        <option value="MÉDIO/TÉCNICO">MÉDIO/TÉCNICO</option>
+                        <option value="GRADUAÇÃO">GRADUAÇÃO</option>
+                        <option value="PÓS-GRADUAÇÃO">PÓS-GRADUAÇÃO</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Ano-Período:</label>
+                    <select id="ano-periodo">
+                        <option value="TODOS">TODOS</option>
+                        <option value="2023.1">2023.1</option>
+                        <option value="2022.2">2022.2</option>
+                        <option value="2022.1">2022.1</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Câmpus:</label>
+                    <select id="campus">
+                        <option value="TODOS">TODOS</option>
+                        <option value="MACEIO">CAMPUS MACEIO</option>
+                        <option value="ARAPIRACA">CAMPUS ARAPIRACA</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Código do Componente:</label>
+                    <input type="text" id="codigo-componente">
+                </div>
+                
+                <div class="form-group">
+                    <label>Local:</label>
+                    <input type="text" id="local">
+                </div>
+                
+                <div class="form-group">
+                    <label>Tipo:</label>
+                    <select id="tipo">
+                        <option value="TODOS">TODOS</option>
+                        <option value="REGULAR">REGULAR</option>
+                        <option value="ESPECIAL">ESPECIAL</option>
+                        <option value="EAD">EAD</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Situação:</label>
+                    <select id="situacao">
+                        <option value="TODAS">TODAS</option>
+                        <option value="ABERTA">ABERTA</option>
+                        <option value="FECHADA">FECHADA</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Ordenar por:</label>
+                    <select id="ordenar">
+                        <option value="componente">Componente</option>
+                        <option value="codigo">Código</option>
+                        <option value="docente">Docente</option>
+                        <option value="ano">Ano-Período</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-primary" id="buscar">Buscar</button>
+                <button class="btn btn-secondary" id="cancelar">Cancelar</button>
+            </div>
+        </div>
+        
+        <div class="results-container">
+            <h3>Turmas Encontradas (<span id="contador">0</span>)</h3>
+            <table id="tabela-turmas">
+                <thead>
+                    <tr>
+                        <th>Componente/Turma</th>
+                        <th>Ano Período</th>
+                        <th>Docente</th>
+                        <th>Tipo</th>
+                        <th>Situação</th>
+                        <th>Horário</th>
+                        <th>Local</th>
+                        <th>Matrículas</th>
+                    </tr>
+                </thead>
+                <tbody id="corpo-tabela">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const turmas = [
+            // Turmas originais
+            {
+                codigo: "MACDSIAPSF3",
+                componente: "ANÁLISE E PROJETO DE SOFTWARE",
+                turma: "913A",
+                anoPeriodo: "2022.1",
+                docente: "AUGUSTO CESAR MELO",
+                tipo: "REGULAR",
+                situacao: "ABERTA",
+                horario: "TEC 14:00-18:00",
+                local: "SALA 201",
+                matriculas: "27/50",
+                curso: "MÉDIO/TÉCNICO",
+                campus: "MACEIO",
+                cargaHoraria: "80h"
+            },
+            {
+                codigo: "MACDSIBIOL3",
+                componente: "BIOLOGIA",
+                turma: "913A",
+                anoPeriodo: "2022.1",
+                docente: "CLAUDIANA MOURA",
+                tipo: "REGULAR",
+                situacao: "ABERTA",
+                horario: "SEX 10:00-12:00",
+                local: "LAB. BIOLOGIA 3",
+                matriculas: "27/50",
+                curso: "MÉDIO/TÉCNICO",
+                campus: "MACEIO",
+                cargaHoraria: "40h"
+            },
+            {
+                codigo: "GRADENG02",
+                componente: "ENGENHARIA ELÉTRICA",
+                turma: "2023B",
+                anoPeriodo: "2023.1",
+                docente: "FERNANDO COSTA",
+                tipo: "REGULAR",
+                situacao: "FECHADA",
+                horario: "SEG 14:00-18:00",
+                local: "LAB. ELETRICA 2",
+                matriculas: "15/30",
+                curso: "GRADUAÇÃO",
+                campus: "ARAPIRACA",
+                cargaHoraria: "60h"
+            },
+            {
+                codigo: "POSGPJ02",
+                componente: "GESTÃO DE PROJETOS ÁGEIS",
+                turma: "PG2023",
+                anoPeriodo: "2023.1",
+                docente: "MARIANA SILVA",
+                tipo: "EAD",
+                situacao: "ABERTA",
+                horario: "SEG 19:00-22:00",
+                local: "SALA VIRTUAL",
+                matriculas: "18/20",
+                curso: "PÓS-GRADUAÇÃO",
+                campus: "MACEIO",
+                cargaHoraria: "120h"
+            },
+            {
+                codigo: "TECINF01",
+                componente: "PROGRAMAÇÃO WEB",
+                turma: "2022C",
+                anoPeriodo: "2022.2",
+                docente: "RAFAEL SANTOS",
+                tipo: "REGULAR",
+                situacao: "ABERTA",
+                horario: "QUI 19:00-22:00",
+                local: "LAB. INFORMÁTICA 5",
+                matriculas: "40/50",
+                curso: "MÉDIO/TÉCNICO",
+                campus: "ARAPIRACA",
+                cargaHoraria: "80h"
+            },
+            {
+                codigo: "GRADADM01",
+                componente: "ADMINISTRAÇÃO FINANCEIRA",
+                turma: "NOT2023",
+                anoPeriodo: "2023.1",
+                docente: "CAROLINA OLIVEIRA",
+                tipo: "REGULAR",
+                situacao: "FECHADA",
+                horario: "TER 19:00-22:00",
+                local: "AUDITÓRIO 3",
+                matriculas: "50/50",
+                curso: "GRADUAÇÃO",
+                campus: "MACEIO",
+                cargaHoraria: "90h"
+            },
+            {
+                codigo: "POSDS01",
+                componente: "DATA SCIENCE AVANÇADO",
+                turma: "DS2023",
+                anoPeriodo: "2023.1",
+                docente: "DR. LUCAS FERNANDES",
+                tipo: "ESPECIAL",
+                situacao: "ABERTA",
+                horario: "QUA 14:00-18:00",
+                local: "LAB. INFORMÁTICA 1",
+                matriculas: "12/15",
+                curso: "PÓS-GRADUAÇÃO",
+                campus: "ARAPIRACA",
+                cargaHoraria: "150h"
+            }
+        ];
+
+        function normalizar(texto) {
+            return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+        }
+
+        function filtrarTurmas() {
+            const filtros = {
+                curso: document.getElementById('curso').value,
+                anoPeriodo: document.getElementById('ano-periodo').value,
+                campus: document.getElementById('campus').value,
+                codigo: normalizar(document.getElementById('codigo-componente').value),
+                local: normalizar(document.getElementById('local').value),
+                tipo: document.getElementById('tipo').value,
+                situacao: document.getElementById('situacao').value,
+                ordenar: document.getElementById('ordenar').value
+            };
+
+            let resultados = turmas.filter(turma => {
+                return (
+                    (filtros.curso === 'TODOS' || turma.curso === filtros.curso) &&
+                    (filtros.anoPeriodo === 'TODOS' || turma.anoPeriodo === filtros.anoPeriodo) &&
+                    (filtros.campus === 'TODOS' || turma.campus === filtros.campus) &&
+                    (filtros.codigo === '' || normalizar(turma.codigo).includes(filtros.codigo)) &&
+                    (filtros.local === '' || normalizar(turma.local).includes(filtros.local)) &&
+                    (filtros.tipo === 'TODOS' || turma.tipo === filtros.tipo) &&
+                    (filtros.situacao === 'TODAS' || turma.situacao === filtros.situacao)
+                );
+            });
+
+            // Ordenação
+            switch(filtros.ordenar) {
+                case 'componente':
+                    resultados.sort((a, b) => a.componente.localeCompare(b.componente));
+                    break;
+                case 'codigo':
+                    resultados.sort((a, b) => a.codigo.localeCompare(b.codigo));
+                    break;
+                case 'docente':
+                    resultados.sort((a, b) => a.docente.localeCompare(b.docente));
+                    break;
+                case 'ano':
+                    resultados.sort((a, b) => b.anoPeriodo.localeCompare(a.anoPeriodo));
+                    break;
+            }
+
+            atualizarTabela(resultados);
+        }
+
+        function atualizarTabela(dados) {
+            const tbody = document.getElementById('corpo-tabela');
+            tbody.innerHTML = '';
+            
+            dados.forEach(turma => {
+                const linha = `
+                    <tr>
+                        <td>${turma.codigo} - ${turma.componente}<br>Turma ${turma.turma}</td>
+                        <td>${turma.anoPeriodo}</td>
+                        <td>${turma.docente} (${turma.cargaHoraria})</td>
+                        <td>${turma.tipo}</td>
+                        <td class="${turma.situacao === 'ABERTA' ? 'status-open' : 'status-closed'}">${turma.situacao}</td>
+                        <td>${turma.horario}</td>
+                        <td>${turma.local}</td>
+                        <td>${turma.matriculas}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += linha;
+            });
+
+            document.getElementById('contador').textContent = dados.length;
+        }
+
+        document.getElementById('buscar').addEventListener('click', filtrarTurmas);
+        document.getElementById('cancelar').addEventListener('click', () => {
+            document.querySelectorAll('select, input').forEach(element => {
+                if (element.tagName === 'SELECT') {
+                    element.value = element.querySelector('option').value;
+                } else {
+                    element.value = '';
+                }
+            });
+            filtrarTurmas();
+        });
+
+        // Inicialização
+        filtrarTurmas();
+    </script>
+</body>
+</html>
